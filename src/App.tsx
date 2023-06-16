@@ -1,9 +1,13 @@
 import { ToolBar } from './widgets/ToolBar'
 import './index.css'
+import { Canvas } from './widgets/Canvas'
 
 function App() {
   return (
-    <ToolBar/>
+    <div className='app'>
+      <ToolBar/>
+      <Canvas/>
+    </div>
   )
 }
 
