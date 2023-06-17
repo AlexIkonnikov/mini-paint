@@ -20,26 +20,6 @@
     margin-right: 0;
 }
 
-.control-button__brush {
-    background-image: url('./../../assets/brush.svg');
-}
-
-.control-button__square {
-    background-image: url('./../../assets/square.svg');
-}
-
-.control-button__circle {
-    background-image: url('./../../assets/circle.svg');
-}
-
-.control-button__straight {
-    background-image: url('./../../assets/straight.svg');
-}
-
-.control-button__eraser {
-    background-image: url('./../../assets/eraser.svg');
-}
-
 .control-button__undo {
     background-image: url('./../../assets/undo.svg');
     margin: 0;
