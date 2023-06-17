@@ -10,7 +10,7 @@ export enum Tools  {
 
 class ToolsStore {
     color = '#000' 
-    tool: Tools | null = null
+    tool: Tools = Tools.BRUSH
 
     constructor() {
         makeAutoObservable(this);
