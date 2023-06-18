@@ -1,1 +1,1 @@
-export {default as ToolGroup} from './ui/ToolGroup'
+export { default as ToolGroup } from './ui/ToolGroup';
