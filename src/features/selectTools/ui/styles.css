@@ -1,0 +1,30 @@
+
+.tool-group .tool {
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 45px;
+}
+
+.tool-group .brush {
+    background-image: url('/src/assets/brush.svg');
+    
+}
+
+.tool-group .square {
+    background-image: url('/src/assets/square.svg');
+    background-size: 30px;
+}
+
+.tool-group .circle {
+    background-image: url('/src/assets/circle.svg');
+}
+
+.tool-group .line {
+    background-image: url('/src/assets/line.svg');
+    background-size: 30px;
+}
+
+.tool-group .eraser {
+    background-image: url('/src/assets/eraser.svg');
+}
