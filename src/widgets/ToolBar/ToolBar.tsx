@@ -1,26 +1,16 @@
-import { Button, Input } from 'antd';
-import { observer } from 'mobx-react-lite';
-import { ChangeEvent, useCallback } from 'react';
+import { Button } from 'antd';
 
+import { ColorPicker } from '../../features/colorPicker';
 import { ToolGroup } from '../../features/selectTools';
-import useDebounce from '../../shared/hooks/useDebounce';
-import ToolsStore from '../../store/tools/ToolsStore';
+import { StrokeWidthPicker } from '../../features/strokeWidthPicker';
 import './styles.css';
 
-const ToolBar = observer(() => {
-  const onChangeColor = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    ToolsStore.setColor(e.target.value);
-  }, []);
-  const debouncedOnChangeColor = useDebounce(onChangeColor, 200);
-
+const ToolBar = () => {
   return (
     <div className="toolbar">
       <ToolGroup />
-      <Input
-        style={{ maxWidth: '100px' }}
-        type={'color'}
-        onChange={debouncedOnChangeColor}
-      />
+      <ColorPicker />
+      <StrokeWidthPicker />
       <div className="toolbar__right-panel">
         <Button className="control-button control-button__undo" type="text" />
         <Button className="control-button control-button__redo" type="text" />
@@ -28,6 +18,6 @@ const ToolBar = observer(() => {
       </div>
     </div>
   );
-});
+};
 
 export default ToolBar;
