@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { FC, LegacyRef, useEffect, useRef } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
@@ -6,9 +7,11 @@ import { DrawerContext } from '../../features/drawing';
 
 import './styles.css';
 
-const Canvas: FC = () => {
+const Canvas: FC = observer(() => {
   let isMouseDown = false;
   const canvas: LegacyRef<HTMLCanvasElement> = useRef(null);
+
+  const { drawer } = CanvasStore;
 
   useEffect(() => {
     if (canvas.current) {
@@ -31,15 +34,9 @@ const Canvas: FC = () => {
   const onMouseUp = (x: number, y: number) => {
     isMouseDown = false;
     DrawerContext?.afterDraw(x, y);
-
-    if (CanvasStore.canvasContext && CanvasStore.canvas) {
-      const snapshot = CanvasStore.canvasContext?.getImageData(
-        0,
-        0,
-        CanvasStore?.canvas.width,
-        CanvasStore?.canvas.height,
-      );
-      HistoryStore.add(snapshot);
+    if (drawer) {
+      const snapshot = drawer.makeSnapshot();
+      snapshot && HistoryStore.add(snapshot);
     }
   };
 
@@ -69,6 +66,6 @@ const Canvas: FC = () => {
       />
     </div>
   );
-};
+});
 
 export default Canvas;

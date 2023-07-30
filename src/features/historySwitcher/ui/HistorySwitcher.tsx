@@ -7,7 +7,8 @@ import { HistoryStore } from '../../../entities/history';
 import { CanvasStore } from '../../../entities/canvas';
 
 const HistorySwitcher = observer(() => {
-  const { canvas, canvasContext } = CanvasStore;
+  const { drawer } = CanvasStore;
+
   const undo = () => {
     const snapshot = HistoryStore.goBack();
     applySnapshot(snapshot);
@@ -19,22 +20,17 @@ const HistorySwitcher = observer(() => {
   };
 
   const applySnapshot = (snapshot: ImageData | undefined) => {
-    if (snapshot) {
-      CanvasStore?.canvasContext?.putImageData(snapshot, 0, 0);
+    if (snapshot && drawer) {
+      drawer.ctx?.putImageData(snapshot, 0, 0);
     }
   };
 
   useEffect(() => {
-    if (canvas && canvasContext) {
-      const initialState = canvasContext.getImageData(
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      );
-      HistoryStore.add(initialState);
+    if (drawer !== null) {
+      const initialState = drawer.makeSnapshot();
+      initialState && HistoryStore.add(initialState);
     }
-  }, [canvasContext, canvas]);
+  }, [drawer]);
 
   return (
     <>

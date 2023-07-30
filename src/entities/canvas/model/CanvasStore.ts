@@ -1,33 +1,33 @@
 import { makeAutoObservable } from 'mobx';
 
+import DrawerHelper from '../../../shared/lib/DrawerHelper';
+
 class CanvasStore {
-  canvas: HTMLCanvasElement | null = null;
-  canvasContext: CanvasRenderingContext2D | null = null;
+  drawer: DrawerHelper | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
   setCanvas(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.canvasContext = canvas.getContext('2d');
+    this.drawer = new DrawerHelper(canvas);
   }
 
   setStrokeColor(color: string) {
-    if (this.canvasContext) {
-      this.canvasContext.strokeStyle = color;
+    if (this.drawer?.ctx) {
+      this.drawer.ctx.strokeStyle = color;
     }
   }
 
   setStrokeWidth(lineWidth: number) {
-    if (this.canvasContext) {
-      this.canvasContext.lineWidth = lineWidth;
+    if (this.drawer?.ctx) {
+      this.drawer.ctx.lineWidth = lineWidth;
     }
   }
 
   getRelativeXYCoords(e: React.MouseEvent<HTMLCanvasElement>) {
-    if (this.canvas) {
-      const rect = this.canvas.getBoundingClientRect();
+    if (this.drawer) {
+      const rect = this.drawer.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       return [x, y];

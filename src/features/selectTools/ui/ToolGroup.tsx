@@ -1,6 +1,6 @@
 import { Radio } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import './styles.css';
 import { CanvasStore } from '../../../entities/canvas';
@@ -18,18 +18,19 @@ import { Tools } from './types';
 
 const ToolGroup = observer(() => {
   const [tool, setTool] = useState<Tools | null>(Tools.BRUSH);
-  const { canvas } = useMemo(() => CanvasStore, []);
+  const { drawer } = CanvasStore;
+
   const changeTool = useCallback((tool: Tools) => {
     setTool(tool);
   }, []);
 
   useEffect(() => {
-    if (canvas) {
-      DrawerContext.setStrategy(new BrushDrawingStrategy(canvas));
+    if (drawer) {
+      DrawerContext.setStrategy(new BrushDrawingStrategy(drawer.canvas));
     }
-  }, [canvas]);
+  }, [drawer]);
 
-  if (!canvas) {
+  if (!drawer) {
     return null;
   }
 
@@ -40,7 +41,7 @@ const ToolGroup = observer(() => {
         value={Tools.BRUSH}
         onClick={() => {
           changeTool(Tools.BRUSH);
-          DrawerContext.setStrategy(new BrushDrawingStrategy(canvas));
+          DrawerContext.setStrategy(new BrushDrawingStrategy(drawer.canvas));
         }}
       />
 
@@ -49,7 +50,7 @@ const ToolGroup = observer(() => {
         value={Tools.SQUARE}
         onClick={() => {
           changeTool(Tools.SQUARE);
-          DrawerContext.setStrategy(new SquareDrawingStrategy(canvas));
+          DrawerContext.setStrategy(new SquareDrawingStrategy(drawer.canvas));
         }}
       />
       <Radio
@@ -57,7 +58,7 @@ const ToolGroup = observer(() => {
         value={Tools.CIRCLE}
         onClick={() => {
           changeTool(Tools.CIRCLE);
-          DrawerContext.setStrategy(new CircleDrawingStrategy(canvas));
+          DrawerContext.setStrategy(new CircleDrawingStrategy(drawer.canvas));
         }}
       />
       <Radio
@@ -65,7 +66,7 @@ const ToolGroup = observer(() => {
         value={Tools.LINE}
         onClick={() => {
           changeTool(Tools.LINE);
-          DrawerContext.setStrategy(new LineDrawingStrategy(canvas));
+          DrawerContext.setStrategy(new LineDrawingStrategy(drawer.canvas));
         }}
       />
       <Radio
@@ -73,7 +74,7 @@ const ToolGroup = observer(() => {
         value={Tools.ERASER}
         onClick={() => {
           changeTool(Tools.ERASER);
-          DrawerContext.setStrategy(new EraserDrawingStrategy(canvas));
+          DrawerContext.setStrategy(new EraserDrawingStrategy(drawer.canvas));
         }}
       />
     </Radio.Group>
