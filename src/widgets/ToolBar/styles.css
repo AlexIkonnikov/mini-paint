@@ -20,11 +20,6 @@
     margin-right: 0;
 }
 
-.control-button__save {
-    background-image: url('./../../assets/save.svg');
-    margin-left: 20px;
-}
-
 .toolbar__right-panel {
     margin-left: auto;
 }
