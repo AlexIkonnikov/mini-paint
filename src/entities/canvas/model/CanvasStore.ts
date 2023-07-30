@@ -24,6 +24,16 @@ class CanvasStore {
       this.canvasContext.lineWidth = lineWidth;
     }
   }
+
+  getRelativeXYCoords(e: React.MouseEvent<HTMLCanvasElement>) {
+    if (this.canvas) {
+      const rect = this.canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      return [x, y];
+    }
+    return [0, 0];
+  }
 }
 
 export default new CanvasStore();

@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 
 import { ColorPicker } from '../../features/colorPicker';
+import { HistorySwitcher } from '../../features/historySwitcher';
 import { ToolGroup } from '../../features/selectTools';
 import { StrokeWidthPicker } from '../../features/strokeWidthPicker';
 import './styles.css';
@@ -12,8 +13,7 @@ const ToolBar = () => {
       <ColorPicker />
       <StrokeWidthPicker />
       <div className="toolbar__right-panel">
-        <Button className="control-button control-button__undo" type="text" />
-        <Button className="control-button control-button__redo" type="text" />
+        <HistorySwitcher />
         <Button className="control-button control-button__save" type="text" />
       </div>
     </div>

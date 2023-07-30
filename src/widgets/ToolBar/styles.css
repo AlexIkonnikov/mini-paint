@@ -20,16 +20,6 @@
     margin-right: 0;
 }
 
-.control-button__undo {
-    background-image: url('./../../assets/undo.svg');
-    margin: 0;
-}
-
-.control-button__redo {
-    background-image: url('./../../assets/redo.svg');
-    margin: 0;
-}
-
 .control-button__save {
     background-image: url('./../../assets/save.svg');
     margin-left: 20px;
