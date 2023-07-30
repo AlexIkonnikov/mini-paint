@@ -1,4 +1,4 @@
-abstract class DrawerHelper {
+class DrawerHelper {
   snapshot: ImageData | undefined = undefined;
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D | null;
@@ -17,6 +17,7 @@ abstract class DrawerHelper {
       this.canvas.width,
       this.canvas.height,
     );
+    return this.snapshot;
   }
 
   applySnapshot() {

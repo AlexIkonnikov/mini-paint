@@ -1,4 +1,5 @@
-import DrawerHelper from './DrawerHelper';
+import DrawerHelper from '../../../shared/lib/DrawerHelper';
+
 import { IDrawerStrategy } from './DrawerStrategy';
 
 class LineDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
