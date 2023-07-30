@@ -1,0 +1,9 @@
+.download {
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('./../../../assets/save.svg');
+    margin-left: 20px;
+    width: 24px;
+    height: 24px;
+}
