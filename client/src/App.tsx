@@ -1,6 +1,7 @@
 import { ToolBar } from './widgets/ToolBar';
-import './index.css';
 import { Canvas } from './widgets/Canvas';
+
+import './index.css';
 
 function App() {
   return (
