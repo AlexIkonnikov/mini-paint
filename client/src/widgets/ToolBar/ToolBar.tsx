@@ -1,5 +1,3 @@
-import { Button } from 'antd';
-
 import { ColorPicker } from '../../features/colorPicker';
 import DownloadLink from '../../features/download/ui/DownloadLink';
 import { HistorySwitcher } from '../../features/historySwitcher';
@@ -15,7 +13,6 @@ const ToolBar = () => {
       <StrokeWidthPicker />
       <div className="toolbar__right-panel">
         <HistorySwitcher />
-        {/* <Button className="control-button control-button__save" type="text" /> */}
         <DownloadLink />
       </div>
     </div>
