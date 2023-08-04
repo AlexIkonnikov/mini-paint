@@ -1,3 +1,4 @@
+import UserList from '../../entities/user/ui/UserList';
 import { ColorPicker } from '../../features/colorPicker';
 import DownloadLink from '../../features/download/ui/DownloadLink';
 import { HistorySwitcher } from '../../features/historySwitcher';
@@ -11,6 +12,9 @@ const ToolBar = () => {
       <ToolGroup />
       <ColorPicker />
       <StrokeWidthPicker />
+      <div style={{ margin: 'auto' }}>
+        <UserList />
+      </div>
       <div className="toolbar__right-panel">
         <HistorySwitcher />
         <DownloadLink />
