@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import App from './src/App';
+import App from './src/app';
 
 const createPath = () => {
   const today = Number(new Date());
