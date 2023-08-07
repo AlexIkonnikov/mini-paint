@@ -19,19 +19,24 @@ const AuthFormModal = observer(() => {
     const socket = io('ws://localhost:8000', {
       query: {
         roomId: params.id,
+        userId: UserStore.currentUser?.id,
       },
     });
 
-    socket.emit('hello', params.id, UserStore.currentUser);
+    socket.emit('hello', UserStore.currentUser);
 
     socket.on('hello', data => {
       UserStore.addUser(data);
     });
 
     socket.on('user-list', users => {
-      (users as IUser[]).forEach(user => {
+      (users as IUser[])?.forEach(user => {
         UserStore.addUser(user as IUser);
       });
+    });
+
+    socket.on('user-leave', (userId: string) => {
+      UserStore.removeUser(userId);
     });
   };
 

@@ -1,8 +1,10 @@
 import express from 'express'
 import http from 'http'
 import {Server} from 'socket.io'
+import querystring from 'node:querystring'
 
-const USER_LIST: Array<Record<string, any>> = [];
+
+const USER_MAP: Record<string, any[]> = {}
 
 const port = 8000
 
@@ -21,10 +23,32 @@ server.listen(port, () => {
 
 io.on('connection', (socket) => {
 
-  socket.on('hello', (roomId, user) => {
-    socket.emit('user-list', USER_LIST);
-    USER_LIST.push(user);
+  const {userId, roomId} = querystring.parse(socket.request.url?.split('?')[1] || '')
 
-    socket.broadcast.emit('hello', user)
+  if (typeof roomId !== 'string' || typeof userId !== 'string') {
+    return;
+  }
+
+  socket.join(roomId);
+
+  socket.on('hello', (user) => {
+    socket.emit('user-list', USER_MAP[roomId]);
+
+    const users = USER_MAP[roomId] ;
+    if (users) {
+      users.push(user);
+    } else {
+      USER_MAP[roomId] = [user];
+    }
+    
+    socket.to(roomId).emit('hello', user);
   });
+
+  socket.on('disconnect', () => {
+    const newUsers = USER_MAP[roomId]?.filter(({id}) => id !== userId);
+    if (newUsers) {
+      USER_MAP[roomId] = newUsers
+    }
+    socket.to(roomId).emit('user-leave', userId);
+  })
 })
