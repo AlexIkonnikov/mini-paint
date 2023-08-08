@@ -3,9 +3,6 @@ import http from 'http'
 import {Server} from 'socket.io'
 import querystring from 'node:querystring'
 
-
-const USER_MAP: Record<string, any[]> = {}
-
 const port = 8000
 
 const app = express();
@@ -22,33 +19,24 @@ server.listen(port, () => {
 });
 
 io.on('connection', (socket) => {
-
-  const {userId, roomId} = querystring.parse(socket.request.url?.split('?')[1] || '')
-
+  const {roomId, userId} = querystring.parse(socket.request.url?.split('?')[1] || '')
+  
   if (typeof roomId !== 'string' || typeof userId !== 'string') {
     return;
   }
 
   socket.join(roomId);
 
-  socket.on('hello', (user) => {
-    socket.emit('user-list', USER_MAP[roomId]);
 
-    const users = USER_MAP[roomId] ;
-    if (users) {
-      users.push(user);
-    } else {
-      USER_MAP[roomId] = [user];
-    }
-    
-    socket.to(roomId).emit('hello', user);
+  socket.on('hello', (user) => {
+    socket.to(roomId).emit('hello', user, socket.id);
+  });
+
+  socket.on('hello-to', (user, id) => {
+    socket.to(id).emit('hello-to', user);
   });
 
   socket.on('disconnect', () => {
-    const newUsers = USER_MAP[roomId]?.filter(({id}) => id !== userId);
-    if (newUsers) {
-      USER_MAP[roomId] = newUsers
-    }
     socket.to(roomId).emit('user-leave', userId);
   })
 })

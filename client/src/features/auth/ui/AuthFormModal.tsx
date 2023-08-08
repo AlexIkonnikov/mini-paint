@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 import { UserStore } from '../../../entities/user';
-import { IUser } from '../../../entities/user/model/UserStore';
 
 const AuthFormModal = observer(() => {
   const { currentUser } = UserStore;
@@ -23,16 +22,15 @@ const AuthFormModal = observer(() => {
       },
     });
 
-    socket.emit('hello', UserStore.currentUser);
+    socket.emit('hello', UserStore.currentUser, socket.id);
 
-    socket.on('hello', data => {
-      UserStore.addUser(data);
+    socket.on('hello', (user, id) => {
+      UserStore.addUser(user);
+      socket.emit('hello-to', UserStore.currentUser, id);
     });
 
-    socket.on('user-list', users => {
-      (users as IUser[])?.forEach(user => {
-        UserStore.addUser(user as IUser);
-      });
+    socket.on('hello-to', user => {
+      UserStore.addUser(user);
     });
 
     socket.on('user-leave', (userId: string) => {
