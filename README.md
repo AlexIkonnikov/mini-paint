@@ -9,10 +9,11 @@ frontend:
 - React;
 - Mobx;
 - antd;
+- socket.io-client;
 - FSD (as methodology);
       
 backend:
 
 - nodejs
 - express
-- express-ws
+- socket-io
