@@ -5,6 +5,7 @@ import { CanvasStore } from '../../entities/canvas';
 import { HistoryStore } from '../../entities/history';
 import { DrawerContext } from '../../features/drawing';
 
+import Ws from './../../shared/lib/Socket';
 import './styles.css';
 
 const Canvas: FC = observer(() => {
@@ -28,6 +29,7 @@ const Canvas: FC = observer(() => {
 
   const onMouseDown = (x: number, y: number) => {
     isMouseDown = true;
+    Ws.beforeDraw(x, y);
     DrawerContext?.beforeDraw(x, y);
   };
 
@@ -43,6 +45,7 @@ const Canvas: FC = observer(() => {
   const onMouseMove = (x: number, y: number) => {
     if (isMouseDown) {
       DrawerContext.draw(x, y);
+      Ws.draw(x, y);
     }
   };
 

@@ -39,4 +39,12 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     socket.to(roomId).emit('user-leave', userId);
   })
+
+  socket.on('draw', (x: number, y: number) => {
+    socket.to(roomId).emit('draw', x, y);
+  })
+
+  socket.on('before-draw', (x: number, y: number) => {
+    socket.to(roomId).emit('before-draw', x, y);
+  })
 })
