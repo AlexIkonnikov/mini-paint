@@ -22,6 +22,10 @@ class DrawerContext {
   public draw(x: number, y: number) {
     this.strategy?.draw(x, y);
   }
+
+  get name(): string {
+    return this.strategy?.name || '';
+  }
 }
 
 export default new DrawerContext();

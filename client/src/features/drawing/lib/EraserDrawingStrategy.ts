@@ -11,6 +11,10 @@ class EraserDrawingStrategy
     super(canvas);
   }
 
+  get name(): string {
+    return 'eraser';
+  }
+
   afterDraw(): void {
     if (this.ctx) {
       this.ctx.strokeStyle = this.prevColor;

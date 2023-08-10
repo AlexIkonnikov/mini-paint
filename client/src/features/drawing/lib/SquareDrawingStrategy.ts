@@ -7,6 +7,10 @@ class SquareDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
     super(canvas);
   }
 
+  get name(): string {
+    return 'square';
+  }
+
   beforeDraw(x: number, y: number) {
     this.makeSnapshot();
     this.x = x;
