@@ -29,22 +29,22 @@ class Ws {
       UserStore.removeUser(userId);
     });
 
-    this.socket?.on('draw', (x: number, y: number) => {
-      DrawerContext.draw(x, y);
-    });
+    // this.socket?.on('draw', (x: number, y: number) => {
+    //   DrawerContext.draw(x, y);
+    // });
 
-    this.socket?.on('before-draw', (x: number, y: number) => {
-      DrawerContext.beforeDraw(x, y);
-    });
+    // this.socket?.on('before-draw', (x: number, y: number) => {
+    //   DrawerContext.beforeDraw(x, y);
+    // });
   }
 
-  draw(x: number, y: number) {
-    this.socket?.emit('draw', x, y);
-  }
+  // draw(event: string, x: number, y: number) {
+  //   this.socket?.emit(event, x, y);
+  // }
 
-  beforeDraw(x: number, y: number) {
-    this.socket?.emit('before-draw', x, y);
-  }
+  // beforeDraw(x: number, y: number) {
+  //   this.socket?.emit('before-draw', x, y);
+  // }
 }
 
 export default new Ws();

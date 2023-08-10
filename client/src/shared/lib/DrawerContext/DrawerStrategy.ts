@@ -1,4 +1,4 @@
-import DrawerHelper from '../../../shared/lib/DrawerHelper';
+import DrawerHelper from './DrawerHelper';
 
 export interface IDrawerStrategy extends DrawerHelper {
   beforeDraw?: (x: number, y: number) => void;

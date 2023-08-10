@@ -28,4 +28,4 @@ class DrawerContext {
   }
 }
 
-export default new DrawerContext();
+export default DrawerContext;

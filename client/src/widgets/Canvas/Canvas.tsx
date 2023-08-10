@@ -3,9 +3,7 @@ import { FC, LegacyRef, useEffect, useRef } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
 import { HistoryStore } from '../../entities/history';
-import { DrawerContext } from '../../features/drawing';
-
-import Ws from './../../shared/lib/Socket';
+import { ClientDrawerContext } from '../../shared/lib/DrawerContext';
 import './styles.css';
 
 const Canvas: FC = observer(() => {
@@ -29,13 +27,13 @@ const Canvas: FC = observer(() => {
 
   const onMouseDown = (x: number, y: number) => {
     isMouseDown = true;
-    Ws.beforeDraw(x, y);
-    DrawerContext?.beforeDraw(x, y);
+    ClientDrawerContext.beforeDraw?.(x, y);
   };
 
   const onMouseUp = (x: number, y: number) => {
     isMouseDown = false;
-    DrawerContext?.afterDraw(x, y);
+    ClientDrawerContext.afterDraw?.(x, y);
+
     if (drawer) {
       const snapshot = drawer.makeSnapshot();
       snapshot && HistoryStore.add(snapshot);
@@ -44,13 +42,12 @@ const Canvas: FC = observer(() => {
 
   const onMouseMove = (x: number, y: number) => {
     if (isMouseDown) {
-      DrawerContext.draw(x, y);
-      Ws.draw(x, y);
+      ClientDrawerContext.draw(x, y);
     }
   };
 
   const onMouseLeave = (x: number, y: number) => {
-    DrawerContext?.afterDraw(x, y);
+    ClientDrawerContext.afterDraw(x, y);
     if (isMouseDown) {
       onMouseUp(x, y);
     }

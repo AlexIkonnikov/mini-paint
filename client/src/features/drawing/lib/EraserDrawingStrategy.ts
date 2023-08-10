@@ -1,5 +1,6 @@
+import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
+
 import BrushDrawingStrategy from './BrushDrawingStrategy';
-import { IDrawerStrategy } from './DrawerStrategy';
 
 class EraserDrawingStrategy
   extends BrushDrawingStrategy
