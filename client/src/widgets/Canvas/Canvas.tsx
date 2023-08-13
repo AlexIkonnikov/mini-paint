@@ -1,22 +1,14 @@
-import { observer } from 'mobx-react-lite';
-import { FC, LegacyRef, useEffect, useRef } from 'react';
+import { FC } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
 import { HistoryStore } from '../../entities/history';
 import { ClientDrawerContext } from '../../shared/lib/DrawerContext';
+import Ws from '../../shared/lib/Socket';
 import './styles.css';
 
-const Canvas: FC = observer(() => {
+const Canvas: FC = () => {
   let isMouseDown = false;
-  const canvas: LegacyRef<HTMLCanvasElement> = useRef(null);
-
   const { drawer } = CanvasStore;
-
-  useEffect(() => {
-    if (canvas.current) {
-      CanvasStore.setCanvas(canvas.current);
-    }
-  }, []);
 
   const withRelativeXYCoords =
     (cb: (x: number, y: number) => void) =>
@@ -28,12 +20,13 @@ const Canvas: FC = observer(() => {
   const onMouseDown = (x: number, y: number) => {
     isMouseDown = true;
     ClientDrawerContext.beforeDraw?.(x, y);
+    Ws.socket?.emit('before-draw', ClientDrawerContext.name, x, y);
   };
 
   const onMouseUp = (x: number, y: number) => {
     isMouseDown = false;
     ClientDrawerContext.afterDraw?.(x, y);
-
+    Ws.socket?.emit('after-draw', ClientDrawerContext.name, x, y);
     if (drawer) {
       const snapshot = drawer.makeSnapshot();
       snapshot && HistoryStore.add(snapshot);
@@ -43,6 +36,7 @@ const Canvas: FC = observer(() => {
   const onMouseMove = (x: number, y: number) => {
     if (isMouseDown) {
       ClientDrawerContext.draw(x, y);
+      Ws.socket?.emit('draw', ClientDrawerContext.name, x, y);
     }
   };
 
@@ -53,10 +47,16 @@ const Canvas: FC = observer(() => {
     }
   };
 
+  const handleCanvasRef = (canvas: HTMLCanvasElement | null) => {
+    if (canvas) {
+      CanvasStore.setCanvas(canvas);
+    }
+  };
+
   return (
     <div className="canvas-wrapper">
       <canvas
-        ref={canvas}
+        ref={handleCanvasRef}
         onMouseDown={withRelativeXYCoords(onMouseDown)}
         onMouseUp={withRelativeXYCoords(onMouseUp)}
         onMouseMove={withRelativeXYCoords(onMouseMove)}
@@ -66,6 +66,6 @@ const Canvas: FC = observer(() => {
       />
     </div>
   );
-});
+};
 
 export default Canvas;
