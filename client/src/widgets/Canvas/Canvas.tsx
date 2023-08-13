@@ -8,7 +8,6 @@ import './styles.css';
 
 const Canvas: FC = () => {
   let isMouseDown = false;
-  const { drawer } = CanvasStore;
 
   const withRelativeXYCoords =
     (cb: (x: number, y: number) => void) =>
@@ -27,6 +26,8 @@ const Canvas: FC = () => {
     isMouseDown = false;
     ClientDrawerContext.afterDraw?.(x, y);
     Ws.socket?.emit('after-draw', ClientDrawerContext.name, x, y);
+
+    const { drawer } = CanvasStore;
     if (drawer) {
       const snapshot = drawer.makeSnapshot();
       snapshot && HistoryStore.add(snapshot);
