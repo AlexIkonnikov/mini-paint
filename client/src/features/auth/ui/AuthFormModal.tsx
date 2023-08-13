@@ -1,13 +1,15 @@
 import { Input, Button, Form, Modal } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
 
+import { CanvasStore } from '../../../entities/canvas';
 import { UserStore } from '../../../entities/user';
+import Ws from '../../../shared/lib/Socket';
 
 const AuthFormModal = observer(() => {
   const { currentUser } = UserStore;
-  const params = useParams();
+  const { drawer } = CanvasStore;
+  const { id } = useParams();
 
   const onChange = ({ username }: { username: string }) => {
     UserStore.setCurrentUser({
@@ -15,27 +17,9 @@ const AuthFormModal = observer(() => {
       name: username,
     });
 
-    const socket = io('ws://localhost:8000', {
-      query: {
-        roomId: params.id,
-        userId: UserStore.currentUser?.id,
-      },
-    });
-
-    socket.emit('hello', UserStore.currentUser, socket.id);
-
-    socket.on('hello', (user, id) => {
-      UserStore.addUser(user);
-      socket.emit('hello-to', UserStore.currentUser, id);
-    });
-
-    socket.on('hello-to', user => {
-      UserStore.addUser(user);
-    });
-
-    socket.on('user-leave', (userId: string) => {
-      UserStore.removeUser(userId);
-    });
+    if (id && drawer?.canvas) {
+      Ws.init(id, drawer.canvas);
+    }
   };
 
   return (

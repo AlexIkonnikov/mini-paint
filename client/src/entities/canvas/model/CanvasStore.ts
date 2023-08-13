@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import DrawerHelper from '../../../shared/lib/DrawerHelper';
+import DrawerHelper from '../../../shared/lib/DrawerContext/DrawerHelper';
 
 class CanvasStore {
   drawer: DrawerHelper | null = null;

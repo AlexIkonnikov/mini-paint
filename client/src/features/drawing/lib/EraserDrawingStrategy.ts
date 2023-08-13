@@ -1,5 +1,6 @@
+import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
+
 import BrushDrawingStrategy from './BrushDrawingStrategy';
-import { IDrawerStrategy } from './DrawerStrategy';
 
 class EraserDrawingStrategy
   extends BrushDrawingStrategy
@@ -9,6 +10,10 @@ class EraserDrawingStrategy
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas);
+  }
+
+  get name(): string {
+    return 'eraser';
   }
 
   afterDraw(): void {
