@@ -40,11 +40,15 @@ io.on('connection', (socket) => {
     socket.to(roomId).emit('user-leave', userId);
   })
 
-  socket.on('draw', (x: number, y: number) => {
-    socket.to(roomId).emit('draw', x, y);
+  socket.on('before-draw', (tool: string, x: number, y: number) => {
+    socket.to(roomId).emit('before-draw', tool, x, y);
   })
 
-  socket.on('before-draw', (x: number, y: number) => {
-    socket.to(roomId).emit('before-draw', x, y);
+  socket.on('draw', (tool:string, x: number, y: number) => {
+    socket.to(roomId).emit('draw', tool, x, y);
+  })
+
+  socket.on('after-draw', (tool: string, x: number, y: number) => {
+    socket.to(roomId).emit('after-draw', tool, x, y);
   })
 })
