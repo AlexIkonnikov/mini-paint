@@ -15,7 +15,7 @@ class Ws {
   socket: Socket | null = null;
 
   init(roomId: string, canvas: HTMLCanvasElement) {
-    this.socket = io('ws://localhost:8000', {
+    this.socket = io(`ws://${window.location.hostname}:8000`, {
       query: {
         roomId,
         userId: UserStore.currentUser?.id,
