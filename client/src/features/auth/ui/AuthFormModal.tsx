@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { CanvasStore } from '../../../entities/canvas';
 import { UserStore } from '../../../entities/user';
+import getRandomColor from '../../../shared/lib/getRandomColor';
 import Ws from '../../../shared/lib/Socket';
 
 const AuthFormModal = observer(() => {
@@ -15,6 +16,7 @@ const AuthFormModal = observer(() => {
     UserStore.setCurrentUser({
       id: username + '-' + new Date().getTime(),
       name: username,
+      color: getRandomColor(),
     });
 
     if (id && drawer?.canvas) {
