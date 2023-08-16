@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 export interface IUser {
   id: string;
   name: string;
+  color: string;
 }
 
 class UserStore {

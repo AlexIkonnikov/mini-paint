@@ -11,7 +11,9 @@ const UserList: FC = observer(() => {
     <Row>
       {users.map(props => (
         <Tooltip key={props.id} title={props.name}>
-          <Avatar style={{ marginRight: 5 }} size={'large'}>
+          <Avatar
+            style={{ marginRight: 5, backgroundColor: props.color }}
+            size={'large'}>
             {props.name[0]}
           </Avatar>
         </Tooltip>
