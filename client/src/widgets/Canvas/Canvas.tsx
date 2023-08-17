@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
 import { HistoryStore } from '../../entities/history';
@@ -8,6 +8,21 @@ import './styles.css';
 
 const Canvas: FC = () => {
   let isMouseDown = false;
+
+  useEffect(() => {
+    const onResize = () => {
+      if (CanvasStore.drawer) {
+        console.log('onResize', window.innerWidth, window.innerHeight);
+        CanvasStore.drawer.canvas.width = window.innerWidth;
+        CanvasStore.drawer.canvas.height = window.innerHeight;
+        CanvasStore.drawer.canvas.style.width = window.innerWidth + 'px';
+        CanvasStore.drawer.canvas.style.height = window.innerHeight + 'px';
+      }
+    };
+    window.addEventListener('resize', onResize, true);
+
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const withRelativeXYCoords =
     (cb: (x: number, y: number) => void) =>
@@ -55,17 +70,19 @@ const Canvas: FC = () => {
   };
 
   return (
-    <div className="canvas-wrapper">
-      <canvas
-        ref={handleCanvasRef}
-        onMouseDown={withRelativeXYCoords(onMouseDown)}
-        onMouseUp={withRelativeXYCoords(onMouseUp)}
-        onMouseMove={withRelativeXYCoords(onMouseMove)}
-        onMouseLeave={withRelativeXYCoords(onMouseLeave)}
-        width={1000}
-        height={600}
-      />
-    </div>
+    <canvas
+      ref={handleCanvasRef}
+      onMouseDown={withRelativeXYCoords(onMouseDown)}
+      onMouseUp={withRelativeXYCoords(onMouseUp)}
+      onMouseMove={withRelativeXYCoords(onMouseMove)}
+      onMouseLeave={withRelativeXYCoords(onMouseLeave)}
+      width={window.innerWidth}
+      height={window.innerHeight}
+      style={{
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }}
+    />
   );
 };
 
