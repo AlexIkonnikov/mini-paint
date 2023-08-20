@@ -28,11 +28,26 @@ class CanvasStore {
   getRelativeXYCoords(e: React.MouseEvent<HTMLCanvasElement>) {
     if (this.drawer) {
       const rect = this.drawer.canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      return [x, y];
+      const scaleX = this.drawer.canvas.width / rect.width;
+      const scaleY = this.drawer.canvas.height / rect.height;
+
+      return [
+        (e.clientX - rect.left) * scaleX,
+        (e.clientY - rect.top) * scaleY,
+      ];
     }
     return [0, 0];
+  }
+
+  onResize() {
+    if (this.drawer) {
+      this.drawer.makeSnapshot();
+      this.drawer.canvas.style.width = window.innerWidth + 'px';
+      this.drawer.canvas.style.height = window.innerHeight + 'px';
+      this.drawer.canvas.width = window.devicePixelRatio * window.innerWidth;
+      this.drawer.canvas.height = window.devicePixelRatio * window.innerHeight;
+      this.drawer.applySnapshot();
+    }
   }
 }
 

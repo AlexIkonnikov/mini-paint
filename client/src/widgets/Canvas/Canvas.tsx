@@ -10,17 +10,8 @@ const Canvas: FC = () => {
   let isMouseDown = false;
 
   useEffect(() => {
-    const onResize = () => {
-      if (CanvasStore.drawer) {
-        console.log('onResize', window.innerWidth, window.innerHeight);
-        CanvasStore.drawer.canvas.width = window.innerWidth;
-        CanvasStore.drawer.canvas.height = window.innerHeight;
-        CanvasStore.drawer.canvas.style.width = window.innerWidth + 'px';
-        CanvasStore.drawer.canvas.style.height = window.innerHeight + 'px';
-      }
-    };
-    window.addEventListener('resize', onResize, true);
-
+    const onResize = CanvasStore.onResize.bind(CanvasStore);
+    window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
@@ -76,8 +67,8 @@ const Canvas: FC = () => {
       onMouseUp={withRelativeXYCoords(onMouseUp)}
       onMouseMove={withRelativeXYCoords(onMouseMove)}
       onMouseLeave={withRelativeXYCoords(onMouseLeave)}
-      width={window.innerWidth}
-      height={window.innerHeight}
+      width={window.innerWidth * window.devicePixelRatio}
+      height={window.innerHeight * window.devicePixelRatio}
       style={{
         width: window.innerWidth,
         height: window.innerHeight,
