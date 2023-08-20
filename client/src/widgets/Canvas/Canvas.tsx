@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
 import { HistoryStore } from '../../entities/history';
@@ -8,6 +8,12 @@ import './styles.css';
 
 const Canvas: FC = () => {
   let isMouseDown = false;
+
+  useEffect(() => {
+    const onResize = CanvasStore.onResize.bind(CanvasStore);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const withRelativeXYCoords =
     (cb: (x: number, y: number) => void) =>
@@ -55,17 +61,19 @@ const Canvas: FC = () => {
   };
 
   return (
-    <div className="canvas-wrapper">
-      <canvas
-        ref={handleCanvasRef}
-        onMouseDown={withRelativeXYCoords(onMouseDown)}
-        onMouseUp={withRelativeXYCoords(onMouseUp)}
-        onMouseMove={withRelativeXYCoords(onMouseMove)}
-        onMouseLeave={withRelativeXYCoords(onMouseLeave)}
-        width={1000}
-        height={600}
-      />
-    </div>
+    <canvas
+      ref={handleCanvasRef}
+      onMouseDown={withRelativeXYCoords(onMouseDown)}
+      onMouseUp={withRelativeXYCoords(onMouseUp)}
+      onMouseMove={withRelativeXYCoords(onMouseMove)}
+      onMouseLeave={withRelativeXYCoords(onMouseLeave)}
+      width={window.innerWidth * window.devicePixelRatio}
+      height={window.innerHeight * window.devicePixelRatio}
+      style={{
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }}
+    />
   );
 };
 
