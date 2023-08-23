@@ -4,8 +4,8 @@ import {
 } from '../../../shared/lib/DrawerContext';
 
 class LineDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
+  constructor(canvasCtx: CanvasRenderingContext2D) {
+    super(canvasCtx);
   }
 
   get name(): string {

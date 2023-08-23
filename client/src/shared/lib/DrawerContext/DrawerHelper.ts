@@ -1,21 +1,19 @@
 class DrawerHelper {
   snapshot: ImageData | undefined = undefined;
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D | null;
+  ctx: CanvasRenderingContext2D;
   x = 0;
   y = 0;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.ctx = canvas.getContext('2d', { willReadFrequently: true });
+  constructor(canvasCtx: CanvasRenderingContext2D) {
+    this.ctx = canvasCtx;
   }
 
   makeSnapshot() {
     this.snapshot = this.ctx?.getImageData(
       0,
       0,
-      this.canvas.width,
-      this.canvas.height,
+      this.ctx.canvas.width,
+      this.ctx.canvas.height,
     );
     return this.snapshot;
   }
