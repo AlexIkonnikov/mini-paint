@@ -8,8 +8,8 @@ class EraserDrawingStrategy
 {
   prevColor: string | CanvasGradient | CanvasPattern = '';
 
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
+  constructor(canvasCtx: CanvasRenderingContext2D) {
+    super(canvasCtx);
   }
 
   get name(): string {

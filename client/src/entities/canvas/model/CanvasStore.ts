@@ -10,26 +10,29 @@ class CanvasStore {
   }
 
   setCanvas(canvas: HTMLCanvasElement) {
-    this.drawer = new DrawerHelper(canvas);
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (ctx) {
+      this.drawer = new DrawerHelper(ctx);
+    }
   }
 
   setStrokeColor(color: string) {
-    if (this.drawer?.ctx) {
+    if (this.drawer) {
       this.drawer.ctx.strokeStyle = color;
     }
   }
 
   setStrokeWidth(lineWidth: number) {
-    if (this.drawer?.ctx) {
+    if (this.drawer) {
       this.drawer.ctx.lineWidth = lineWidth;
     }
   }
 
   getRelativeXYCoords(e: React.MouseEvent<HTMLCanvasElement>) {
     if (this.drawer) {
-      const rect = this.drawer.canvas.getBoundingClientRect();
-      const scaleX = this.drawer.canvas.width / rect.width;
-      const scaleY = this.drawer.canvas.height / rect.height;
+      const rect = this.drawer.ctx.canvas.getBoundingClientRect();
+      const scaleX = this.drawer.ctx.canvas.width / rect.width;
+      const scaleY = this.drawer.ctx.canvas.height / rect.height;
 
       return [
         (e.clientX - rect.left) * scaleX,
@@ -42,10 +45,13 @@ class CanvasStore {
   onResize() {
     if (this.drawer) {
       this.drawer.makeSnapshot();
-      this.drawer.canvas.style.width = window.innerWidth + 'px';
-      this.drawer.canvas.style.height = window.innerHeight + 'px';
-      this.drawer.canvas.width = window.devicePixelRatio * window.innerWidth;
-      this.drawer.canvas.height = window.devicePixelRatio * window.innerHeight;
+
+      const { ctx } = this.drawer;
+      ctx.canvas.style.width = window.innerWidth + 'px';
+      ctx.canvas.style.height = window.innerHeight + 'px';
+      ctx.canvas.width = window.devicePixelRatio * window.innerWidth;
+      ctx.canvas.height = window.devicePixelRatio * window.innerHeight;
+
       this.drawer.applySnapshot();
     }
   }

@@ -61,21 +61,27 @@ class Ws {
 }
 
 const selectStrategy = (tool: string, canvas: HTMLCanvasElement) => {
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  if (!ctx) {
+    return;
+  }
+
   switch (tool) {
     case 'brush':
-      ServerDrawerContext.setStrategy(new BrushDrawingStrategy(canvas));
+      ServerDrawerContext.setStrategy(new BrushDrawingStrategy(ctx));
       break;
     case 'circle':
-      ServerDrawerContext.setStrategy(new CircleDrawingStrategy(canvas));
+      ServerDrawerContext.setStrategy(new CircleDrawingStrategy(ctx));
       break;
     case 'square':
-      ServerDrawerContext.setStrategy(new SquareDrawingStrategy(canvas));
+      ServerDrawerContext.setStrategy(new SquareDrawingStrategy(ctx));
       break;
     case 'line':
-      ServerDrawerContext.setStrategy(new LineDrawingStrategy(canvas));
+      ServerDrawerContext.setStrategy(new LineDrawingStrategy(ctx));
       break;
     case 'eraser':
-      ServerDrawerContext.setStrategy(new EraserDrawingStrategy(canvas));
+      ServerDrawerContext.setStrategy(new EraserDrawingStrategy(ctx));
   }
 };
 

@@ -19,8 +19,8 @@ const AuthFormModal = observer(() => {
       color: getRandomColor(),
     });
 
-    if (id && drawer?.canvas) {
-      Ws.init(id, drawer.canvas);
+    if (id && drawer) {
+      Ws.init(id, drawer.ctx.canvas);
     }
   };
 
