@@ -5,16 +5,16 @@ import { FC } from 'react';
 import UserStore from '../model/UserStore';
 
 const UserList: FC = observer(() => {
-  const { users } = UserStore;
+  const { userList } = UserStore;
 
   return (
     <Row>
-      {users.map(props => (
-        <Tooltip key={props.id} title={props.name}>
+      {userList.map(([id, user]) => (
+        <Tooltip key={id} title={user.name}>
           <Avatar
-            style={{ marginRight: 5, backgroundColor: props.color }}
+            style={{ marginRight: 5, backgroundColor: user.color }}
             size={'large'}>
-            {props.name[0]}
+            {user.name[0]}
           </Avatar>
         </Tooltip>
       ))}
