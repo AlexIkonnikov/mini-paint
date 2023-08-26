@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 
 import { CanvasStore } from '../../entities/canvas';
-import { HistoryStore } from '../../entities/history';
 import { ClientDrawerContext } from '../../shared/lib/DrawerContext';
 import Ws from '../../shared/lib/Socket';
 import './styles.css';
@@ -32,12 +31,6 @@ const Canvas: FC = () => {
     isMouseDown = false;
     ClientDrawerContext.afterDraw?.(x, y);
     Ws.socket?.emit('after-draw', ClientDrawerContext.name, x, y);
-
-    const { drawer } = CanvasStore;
-    if (drawer) {
-      const snapshot = drawer.makeSnapshot();
-      snapshot && HistoryStore.add(snapshot);
-    }
   };
 
   const onMouseMove = (x: number, y: number) => {
