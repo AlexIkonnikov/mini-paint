@@ -6,8 +6,6 @@ class EraserDrawingStrategy
   extends BrushDrawingStrategy
   implements IDrawerStrategy
 {
-  prevColor: string | CanvasGradient | CanvasPattern = '';
-
   constructor(canvasCtx: CanvasRenderingContext2D) {
     super(canvasCtx);
   }
@@ -17,14 +15,12 @@ class EraserDrawingStrategy
   }
 
   afterDraw(): void {
-    if (this.ctx) {
-      this.ctx.strokeStyle = this.prevColor;
-    }
+    this.ctx.restore();
   }
 
   beforeDraw(x: number, y: number): void {
     if (this.ctx) {
-      this.prevColor = this.ctx.strokeStyle;
+      this.ctx.save();
       this.ctx.strokeStyle = 'white';
     }
     super.beforeDraw(x, y);
