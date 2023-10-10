@@ -1,13 +1,19 @@
 import { makeAutoObservable } from 'mobx';
 
+import DrawerContext from '../../../shared/lib/DrawerContext/DrawerContext';
+
 export interface IUser {
   id: string;
   name: string;
   color: string;
 }
 
+export interface IExternalUser extends IUser {
+  context: DrawerContext;
+}
+
 class UserStore {
-  users: IUser[] = [];
+  users = new Map<string, IExternalUser>();
   currentUser: IUser | null = null;
 
   constructor() {
@@ -18,12 +24,18 @@ class UserStore {
     this.currentUser = currentUser;
   }
 
-  addUser(user: IUser) {
-    this.users.push(user);
+  addUser(user: IExternalUser) {
+    this.users.set(user.id, user);
   }
 
   removeUser(userId: string) {
-    this.users = this.users.filter(({ id }) => id !== userId);
+    if (this.users.has(userId)) {
+      this.users.delete(userId);
+    }
+  }
+
+  get userList() {
+    return Array.from(this.users);
   }
 }
 

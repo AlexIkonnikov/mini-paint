@@ -9,7 +9,7 @@ const DownloadLink = observer(() => {
 
   const download = () => {
     if (drawer) {
-      const image = drawer.canvas.toDataURL();
+      const image = drawer.ctx.canvas.toDataURL();
       const link = document.createElement('a');
       link.download = 'drawing.png';
       link.href = image;
