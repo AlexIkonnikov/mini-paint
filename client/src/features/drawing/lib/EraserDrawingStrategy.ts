@@ -1,4 +1,7 @@
-import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
+import {
+  DrawerHelper,
+  IDrawerStrategy,
+} from '../../../shared/lib/DrawerContext';
 
 import BrushDrawingStrategy from './BrushDrawingStrategy';
 
@@ -6,8 +9,8 @@ class EraserDrawingStrategy
   extends BrushDrawingStrategy
   implements IDrawerStrategy
 {
-  constructor(canvasCtx: CanvasRenderingContext2D) {
-    super(canvasCtx);
+  constructor(drawerHelper: DrawerHelper) {
+    super(drawerHelper);
   }
 
   get name(): string {
@@ -15,14 +18,12 @@ class EraserDrawingStrategy
   }
 
   afterDraw(): void {
-    this.ctx.restore();
+    this.drawerHelper.ctx.restore();
   }
 
   beforeDraw(x: number, y: number): void {
-    if (this.ctx) {
-      this.ctx.save();
-      this.ctx.strokeStyle = 'white';
-    }
+    this.drawerHelper.ctx.save();
+    this.drawerHelper.ctx.strokeStyle = 'white';
     super.beforeDraw(x, y);
   }
 }

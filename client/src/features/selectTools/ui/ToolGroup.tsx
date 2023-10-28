@@ -1,9 +1,7 @@
 import { Radio } from 'antd';
-import { observer } from 'mobx-react-lite';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import './styles.css';
-import { CanvasStore } from '../../../entities/canvas';
 //TODO: fix fsd rule (feature import feature)
 import {
   BrushDrawingStrategy,
@@ -12,31 +10,17 @@ import {
   LineDrawingStrategy,
   SquareDrawingStrategy,
 } from '../../drawing';
-import { ClientDrawerContext } from '../../../shared/lib/DrawerContext';
+import DrawerContext, { DrawerHelper } from '../../../shared/lib/DrawerContext';
+import { Canvas } from '../../../shared/lib/Canvas';
 
 import { Tools } from './types';
 
-const ToolGroup = observer(() => {
+const ToolGroup = () => {
   const [tool, setTool] = useState<Tools | null>(Tools.BRUSH);
-  const { drawer } = CanvasStore;
 
   const changeTool = useCallback((tool: Tools) => {
     setTool(tool);
   }, []);
-
-  useEffect(() => {
-    if (drawer && drawer.ctx) {
-      ClientDrawerContext.setStrategy(new BrushDrawingStrategy(drawer.ctx));
-    }
-  }, [drawer]);
-
-  const context = useMemo(() => {
-    return drawer?.ctx;
-  }, [drawer]);
-
-  if (!drawer || !context) {
-    return null;
-  }
 
   return (
     <Radio.Group optionType="button" className="tool-group" value={tool}>
@@ -45,16 +29,19 @@ const ToolGroup = observer(() => {
         value={Tools.BRUSH}
         onClick={() => {
           changeTool(Tools.BRUSH);
-          ClientDrawerContext.setStrategy(new BrushDrawingStrategy(context));
+          const { ctx } = Canvas.getInstance();
+          const strategy = new BrushDrawingStrategy(new DrawerHelper(ctx));
+          DrawerContext.setStrategy(strategy);
         }}
       />
-
       <Radio
         className="tool square"
         value={Tools.SQUARE}
         onClick={() => {
           changeTool(Tools.SQUARE);
-          ClientDrawerContext.setStrategy(new SquareDrawingStrategy(context));
+          const { ctx } = Canvas.getInstance();
+          const strategy = new SquareDrawingStrategy(new DrawerHelper(ctx));
+          DrawerContext.setStrategy(strategy);
         }}
       />
       <Radio
@@ -62,7 +49,9 @@ const ToolGroup = observer(() => {
         value={Tools.CIRCLE}
         onClick={() => {
           changeTool(Tools.CIRCLE);
-          ClientDrawerContext.setStrategy(new CircleDrawingStrategy(context));
+          const { ctx } = Canvas.getInstance();
+          const strategy = new CircleDrawingStrategy(new DrawerHelper(ctx));
+          DrawerContext.setStrategy(strategy);
         }}
       />
       <Radio
@@ -70,7 +59,9 @@ const ToolGroup = observer(() => {
         value={Tools.LINE}
         onClick={() => {
           changeTool(Tools.LINE);
-          ClientDrawerContext.setStrategy(new LineDrawingStrategy(context));
+          const { ctx } = Canvas.getInstance();
+          const strategy = new LineDrawingStrategy(new DrawerHelper(ctx));
+          DrawerContext.setStrategy(strategy);
         }}
       />
       <Radio
@@ -78,11 +69,13 @@ const ToolGroup = observer(() => {
         value={Tools.ERASER}
         onClick={() => {
           changeTool(Tools.ERASER);
-          ClientDrawerContext.setStrategy(new EraserDrawingStrategy(context));
+          const { ctx } = Canvas.getInstance();
+          const strategy = new EraserDrawingStrategy(new DrawerHelper(ctx));
+          DrawerContext.setStrategy(strategy);
         }}
       />
     </Radio.Group>
   );
-});
+};
 
 export default ToolGroup;

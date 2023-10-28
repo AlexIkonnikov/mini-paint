@@ -3,9 +3,11 @@ import {
   DrawerHelper,
 } from '../../../shared/lib/DrawerContext';
 
-class CircleDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
-  constructor(canvasCtx: CanvasRenderingContext2D) {
-    super(canvasCtx);
+class CircleDrawingStrategy implements IDrawerStrategy {
+  drawerHelper: DrawerHelper;
+
+  constructor(drawerHelper: DrawerHelper) {
+    this.drawerHelper = drawerHelper;
   }
 
   get name(): string {
@@ -13,21 +15,31 @@ class CircleDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.makeSnapshot();
-    this.x = x;
-    this.y = y;
+    this.drawerHelper.makeSnapshot();
+    this.drawerHelper.x = x;
+    this.drawerHelper.y = y;
   }
 
-  draw(x: number, y: number): void {
-    this.applySnapshot();
-    this.ctx?.beginPath();
-    this.ctx?.arc(this.x, this.y, this.getRadius(x, y), 0, 2 * Math.PI);
-    this.ctx?.stroke();
+  draw(newX: number, newY: number): void {
+    const { x, y } = this.drawerHelper;
+
+    this.drawerHelper.applySnapshot();
+    this.drawerHelper.ctx?.beginPath();
+    this.drawerHelper.ctx?.arc(
+      x,
+      y,
+      this.getRadius(newX, newY),
+      0,
+      2 * Math.PI,
+    );
+    this.drawerHelper.ctx?.stroke();
   }
 
   private getRadius(currentX: number, currentY: number) {
-    const horizontalLeg = this.x - currentX;
-    const verticalLeg = this.y - currentY;
+    const { x, y } = this.drawerHelper;
+
+    const horizontalLeg = x - currentX;
+    const verticalLeg = y - currentY;
     return Math.sqrt(Math.pow(horizontalLeg, 2) + Math.pow(verticalLeg, 2));
   }
 }
