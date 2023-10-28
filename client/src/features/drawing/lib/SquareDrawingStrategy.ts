@@ -23,8 +23,8 @@ class SquareDrawingStrategy implements IDrawerStrategy {
   draw(newX: number, newY: number) {
     const { x, y } = this.drawerHelper;
     this.drawerHelper.applySnapshot();
-    this.drawerHelper.ctx?.beginPath();
-    this.drawerHelper.ctx?.strokeRect(x, y, newX - x, newY - y);
+    this.drawerHelper.ctx.beginPath();
+    this.drawerHelper.ctx.strokeRect(x, y, newX - x, newY - y);
   }
 }
 

@@ -15,13 +15,13 @@ class BrushDrawingStrategy implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.drawerHelper.ctx?.beginPath();
-    this.drawerHelper.ctx?.moveTo(x, y);
+    this.drawerHelper.ctx.beginPath();
+    this.drawerHelper.ctx.moveTo(x, y);
   }
 
   draw(x: number, y: number) {
-    this.drawerHelper.ctx?.lineTo(x, y);
-    this.drawerHelper.ctx?.stroke();
+    this.drawerHelper.ctx.lineTo(x, y);
+    this.drawerHelper.ctx.stroke();
   }
 }
 

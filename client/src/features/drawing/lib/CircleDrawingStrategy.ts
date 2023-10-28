@@ -24,15 +24,9 @@ class CircleDrawingStrategy implements IDrawerStrategy {
     const { x, y } = this.drawerHelper;
 
     this.drawerHelper.applySnapshot();
-    this.drawerHelper.ctx?.beginPath();
-    this.drawerHelper.ctx?.arc(
-      x,
-      y,
-      this.getRadius(newX, newY),
-      0,
-      2 * Math.PI,
-    );
-    this.drawerHelper.ctx?.stroke();
+    this.drawerHelper.ctx.beginPath();
+    this.drawerHelper.ctx.arc(x, y, this.getRadius(newX, newY), 0, 2 * Math.PI);
+    this.drawerHelper.ctx.stroke();
   }
 
   private getRadius(currentX: number, currentY: number) {

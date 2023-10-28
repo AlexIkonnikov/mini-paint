@@ -24,10 +24,10 @@ class LineDrawingStrategy implements IDrawerStrategy {
     const { x, y } = this.drawerHelper;
 
     this.drawerHelper.applySnapshot();
-    this.drawerHelper.ctx?.beginPath();
-    this.drawerHelper.ctx?.moveTo(x, y);
-    this.drawerHelper.ctx?.lineTo(newX, newY);
-    this.drawerHelper.ctx?.stroke();
+    this.drawerHelper.ctx.beginPath();
+    this.drawerHelper.ctx.moveTo(x, y);
+    this.drawerHelper.ctx.lineTo(newX, newY);
+    this.drawerHelper.ctx.stroke();
   }
 }
 
