@@ -1,24 +1,20 @@
 import { Button } from 'antd';
-import { observer } from 'mobx-react-lite';
 
-import { CanvasStore } from '../../../entities/canvas';
+import { Canvas } from '../../../shared/lib/Canvas';
 import './styles.css';
 
-const DownloadLink = observer(() => {
-  const { drawer } = CanvasStore;
-
+const DownloadLink = () => {
   const download = () => {
-    if (drawer) {
-      const image = drawer.ctx.canvas.toDataURL();
-      const link = document.createElement('a');
-      link.download = 'drawing.png';
-      link.href = image;
-      link.click();
-      link.remove();
-    }
+    const { ctx } = Canvas.getInstance();
+    const image = ctx.canvas.toDataURL();
+    const link = document.createElement('a');
+    link.download = 'drawing.png';
+    link.href = image;
+    link.click();
+    link.remove();
   };
 
   return <Button className="download" type="text" onClick={download} />;
-});
+};
 
 export default DownloadLink;

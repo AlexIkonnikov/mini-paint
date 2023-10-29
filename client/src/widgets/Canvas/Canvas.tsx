@@ -1,61 +1,80 @@
 import { FC, useEffect } from 'react';
 
-import { CanvasStore } from '../../entities/canvas';
-import { ClientDrawerContext } from '../../shared/lib/DrawerContext';
+import DrawerContext, { DrawerHelper } from '../../shared/lib/DrawerContext';
 import Ws from '../../shared/lib/Socket';
+import { Canvas as Singleton } from '../../shared/lib/Canvas';
 import './styles.css';
+import { BrushDrawingStrategy } from '../../features/drawing';
 
 const Canvas: FC = () => {
   let isMouseDown = false;
 
   useEffect(() => {
-    const onResize = CanvasStore.onResize.bind(CanvasStore);
+    const { ctx } = Singleton.getInstance();
+    const helper = new DrawerHelper(ctx);
+
+    const onResize = () => {
+      helper.makeSnapshot();
+      ctx.canvas.style.width = window.innerWidth + 'px';
+      ctx.canvas.style.height = window.innerHeight + 'px';
+      ctx.canvas.width = window.devicePixelRatio * window.innerWidth;
+      ctx.canvas.height = window.devicePixelRatio * window.innerHeight;
+      helper.applySnapshot();
+    };
+
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  /* initial strategy */
+  useEffect(() => {
+    const { ctx } = Singleton.getInstance();
+    DrawerContext.setStrategy(new BrushDrawingStrategy(new DrawerHelper(ctx)));
   }, []);
 
   const withRelativeXYCoords =
     (cb: (x: number, y: number) => void) =>
     (e: React.MouseEvent<HTMLCanvasElement>) => {
-      const [x, y] = CanvasStore.getRelativeXYCoords(e);
-      return cb(x, y);
+      const { ctx } = Singleton.getInstance();
+      const rect = ctx.canvas.getBoundingClientRect();
+      const scaleX = ctx.canvas.width / rect.width;
+      const scaleY = ctx.canvas.height / rect.height;
+
+      return cb(
+        (e.clientX - rect.left) * scaleX,
+        (e.clientY - rect.top) * scaleY,
+      );
     };
 
   const onMouseDown = (x: number, y: number) => {
     isMouseDown = true;
-    ClientDrawerContext.beforeDraw?.(x, y);
-    Ws.socket?.emit('before-draw', ClientDrawerContext.name, x, y);
+    DrawerContext.beforeDraw?.(x, y);
+    Ws.socket?.emit('before-draw', DrawerContext.name, x, y);
   };
 
   const onMouseUp = (x: number, y: number) => {
     isMouseDown = false;
-    ClientDrawerContext.afterDraw?.(x, y);
-    Ws.socket?.emit('after-draw', ClientDrawerContext.name, x, y);
+    DrawerContext.afterDraw?.(x, y);
+    Ws.socket?.emit('after-draw', DrawerContext.name, x, y);
   };
 
   const onMouseMove = (x: number, y: number) => {
     if (isMouseDown) {
-      ClientDrawerContext.draw(x, y);
-      Ws.socket?.emit('draw', ClientDrawerContext.name, x, y);
+      DrawerContext.draw(x, y);
+      Ws.socket?.emit('draw', DrawerContext.name, x, y);
     }
   };
 
   const onMouseLeave = (x: number, y: number) => {
-    ClientDrawerContext.afterDraw(x, y);
+    DrawerContext.afterDraw(x, y);
     if (isMouseDown) {
       onMouseUp(x, y);
     }
   };
 
-  const handleCanvasRef = (canvas: HTMLCanvasElement | null) => {
-    if (canvas) {
-      CanvasStore.setCanvas(canvas);
-    }
-  };
-
   return (
     <canvas
-      ref={handleCanvasRef}
+      id="canvas"
       onMouseDown={withRelativeXYCoords(onMouseDown)}
       onMouseUp={withRelativeXYCoords(onMouseUp)}
       onMouseMove={withRelativeXYCoords(onMouseMove)}

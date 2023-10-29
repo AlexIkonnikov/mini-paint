@@ -8,8 +8,9 @@ class DrawerHelper {
     this.ctx = canvasCtx;
   }
 
+  //TODO: try to get rid of this
   makeSnapshot() {
-    this.snapshot = this.ctx?.getImageData(
+    this.snapshot = this.ctx.getImageData(
       0,
       0,
       this.ctx.canvas.width,
@@ -18,9 +19,10 @@ class DrawerHelper {
     return this.snapshot;
   }
 
+  //TODO: try to get rid of this
   applySnapshot() {
     if (this.snapshot) {
-      this.ctx?.putImageData(this.snapshot, 0, 0);
+      this.ctx.putImageData(this.snapshot, 0, 0);
     }
   }
 }

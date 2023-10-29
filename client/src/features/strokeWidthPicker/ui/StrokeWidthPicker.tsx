@@ -1,12 +1,12 @@
 import { Input } from 'antd';
-import { observer } from 'mobx-react-lite';
 import { ChangeEvent } from 'react';
 
-import { CanvasStore } from '../../../entities/canvas';
+import { Canvas } from '../../../shared/lib/Canvas';
 
-const StrokeWidthPicker = observer(() => {
+const StrokeWidthPicker = () => {
   const setStrokeWidth = (e: ChangeEvent<HTMLInputElement>) => {
-    CanvasStore.setStrokeWidth(Number(e.target.value));
+    const { ctx } = Canvas.getInstance();
+    ctx.lineWidth = Number(e.target.value);
   };
 
   return (
@@ -19,6 +19,6 @@ const StrokeWidthPicker = observer(() => {
       style={{ maxWidth: '100px', marginLeft: '50px' }}
     />
   );
-});
+};
 
 export default StrokeWidthPicker;

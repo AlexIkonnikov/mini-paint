@@ -3,9 +3,11 @@ import {
   DrawerHelper,
 } from '../../../shared/lib/DrawerContext';
 
-class BrushDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
-  constructor(canvasCtx: CanvasRenderingContext2D) {
-    super(canvasCtx);
+class BrushDrawingStrategy implements IDrawerStrategy {
+  drawerHelper: DrawerHelper;
+
+  constructor(drawerHelper: DrawerHelper) {
+    this.drawerHelper = drawerHelper;
   }
 
   get name(): string {
@@ -13,13 +15,13 @@ class BrushDrawingStrategy extends DrawerHelper implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.ctx?.beginPath();
-    this.ctx?.moveTo(x, y);
+    this.drawerHelper.ctx.beginPath();
+    this.drawerHelper.ctx.moveTo(x, y);
   }
 
   draw(x: number, y: number) {
-    this.ctx?.lineTo(x, y);
-    this.ctx?.stroke();
+    this.drawerHelper.ctx.lineTo(x, y);
+    this.drawerHelper.ctx.stroke();
   }
 }
 

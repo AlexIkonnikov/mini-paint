@@ -9,12 +9,13 @@ import {
   SquareDrawingStrategy,
 } from '../../features/drawing';
 
-import { ServerDrawerContext } from './DrawerContext';
+import Canvas from './Canvas/Canvas';
+import DrawerContext, { DrawerHelper } from './DrawerContext';
 
 class Ws {
   socket: Socket | null = null;
 
-  init(roomId: string, canvas: HTMLCanvasElement) {
+  init(roomId: string) {
     this.socket = io(`ws://${window.location.hostname}:8000`, {
       query: {
         roomId,
@@ -38,50 +39,47 @@ class Ws {
     });
 
     this.socket?.on('before-draw', (tool: string, x: number, y: number) => {
-      if (tool !== ServerDrawerContext.name) {
-        selectStrategy(tool, canvas);
+      if (tool !== DrawerContext.name) {
+        setStrategy(tool);
       }
-      ServerDrawerContext.beforeDraw(x, y);
+      DrawerContext.beforeDraw(x, y);
     });
 
     this.socket?.on('draw', (tool: string, x: number, y: number) => {
-      if (tool !== ServerDrawerContext.name) {
-        selectStrategy(tool, canvas);
+      if (tool !== DrawerContext.name) {
+        setStrategy(tool);
       }
-      ServerDrawerContext.draw(x, y);
+      DrawerContext.draw(x, y);
     });
 
     this.socket?.on('after-draw', (tool: string, x: number, y: number) => {
-      if (tool !== ServerDrawerContext.name) {
-        selectStrategy(tool, canvas);
+      if (tool !== DrawerContext.name) {
+        setStrategy(tool);
       }
-      ServerDrawerContext.afterDraw(x, y);
+      DrawerContext.afterDraw(x, y);
     });
   }
 }
 
-const selectStrategy = (tool: string, canvas: HTMLCanvasElement) => {
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-  if (!ctx) {
-    return;
-  }
+const setStrategy = (tool: string) => {
+  const { ctx } = Canvas.getInstance();
+  const helper = new DrawerHelper(ctx);
 
   switch (tool) {
     case 'brush':
-      ServerDrawerContext.setStrategy(new BrushDrawingStrategy(ctx));
+      DrawerContext.setStrategy(new BrushDrawingStrategy(helper));
       break;
     case 'circle':
-      ServerDrawerContext.setStrategy(new CircleDrawingStrategy(ctx));
+      DrawerContext.setStrategy(new CircleDrawingStrategy(helper));
       break;
     case 'square':
-      ServerDrawerContext.setStrategy(new SquareDrawingStrategy(ctx));
+      DrawerContext.setStrategy(new SquareDrawingStrategy(helper));
       break;
     case 'line':
-      ServerDrawerContext.setStrategy(new LineDrawingStrategy(ctx));
+      DrawerContext.setStrategy(new LineDrawingStrategy(helper));
       break;
     case 'eraser':
-      ServerDrawerContext.setStrategy(new EraserDrawingStrategy(ctx));
+      DrawerContext.setStrategy(new EraserDrawingStrategy(helper));
   }
 };
 
