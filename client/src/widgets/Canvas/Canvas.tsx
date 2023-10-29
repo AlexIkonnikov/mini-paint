@@ -9,6 +9,23 @@ import { BrushDrawingStrategy } from '../../features/drawing';
 const Canvas: FC = () => {
   let isMouseDown = false;
 
+  useEffect(() => {
+    const { ctx } = Singleton.getInstance();
+    const helper = new DrawerHelper(ctx);
+
+    const onResize = () => {
+      helper.makeSnapshot();
+      ctx.canvas.style.width = window.innerWidth + 'px';
+      ctx.canvas.style.height = window.innerHeight + 'px';
+      ctx.canvas.width = window.devicePixelRatio * window.innerWidth;
+      ctx.canvas.height = window.devicePixelRatio * window.innerHeight;
+      helper.applySnapshot();
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   /* initial strategy */
   useEffect(() => {
     const { ctx } = Singleton.getInstance();

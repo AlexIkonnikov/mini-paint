@@ -40,28 +40,28 @@ class Ws {
 
     this.socket?.on('before-draw', (tool: string, x: number, y: number) => {
       if (tool !== DrawerContext.name) {
-        selectStrategy(tool);
+        setStrategy(tool);
       }
       DrawerContext.beforeDraw(x, y);
     });
 
     this.socket?.on('draw', (tool: string, x: number, y: number) => {
       if (tool !== DrawerContext.name) {
-        selectStrategy(tool);
+        setStrategy(tool);
       }
       DrawerContext.draw(x, y);
     });
 
     this.socket?.on('after-draw', (tool: string, x: number, y: number) => {
       if (tool !== DrawerContext.name) {
-        selectStrategy(tool);
+        setStrategy(tool);
       }
       DrawerContext.afterDraw(x, y);
     });
   }
 }
 
-const selectStrategy = (tool: string) => {
+const setStrategy = (tool: string) => {
   const { ctx } = Canvas.getInstance();
   const helper = new DrawerHelper(ctx);
 
