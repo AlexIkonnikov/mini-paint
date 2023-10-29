@@ -1,13 +1,11 @@
-import {
-  IDrawerStrategy,
-  DrawerHelper,
-} from '../../../shared/lib/DrawerContext';
+import { Canvas } from '../../../shared/lib/Canvas';
+import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
 
 class BrushDrawingStrategy implements IDrawerStrategy {
-  drawerHelper: DrawerHelper;
+  ctx: CanvasRenderingContext2D;
 
-  constructor(drawerHelper: DrawerHelper) {
-    this.drawerHelper = drawerHelper;
+  constructor() {
+    this.ctx = Canvas.getInstance().ctx;
   }
 
   get name(): string {
@@ -15,13 +13,13 @@ class BrushDrawingStrategy implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.drawerHelper.ctx.beginPath();
-    this.drawerHelper.ctx.moveTo(x, y);
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
   }
 
   draw(x: number, y: number) {
-    this.drawerHelper.ctx.lineTo(x, y);
-    this.drawerHelper.ctx.stroke();
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
   }
 }
 

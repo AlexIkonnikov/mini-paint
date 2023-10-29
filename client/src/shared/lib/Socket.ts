@@ -9,8 +9,7 @@ import {
   SquareDrawingStrategy,
 } from '../../features/drawing';
 
-import Canvas from './Canvas/Canvas';
-import DrawerContext, { DrawerHelper } from './DrawerContext';
+import DrawerContext from './DrawerContext';
 
 class Ws {
   socket: Socket | null = null;
@@ -62,24 +61,21 @@ class Ws {
 }
 
 const setStrategy = (tool: string) => {
-  const { ctx } = Canvas.getInstance();
-  const helper = new DrawerHelper(ctx);
-
   switch (tool) {
     case 'brush':
-      DrawerContext.setStrategy(new BrushDrawingStrategy(helper));
+      DrawerContext.setStrategy(new BrushDrawingStrategy());
       break;
     case 'circle':
-      DrawerContext.setStrategy(new CircleDrawingStrategy(helper));
+      DrawerContext.setStrategy(new CircleDrawingStrategy());
       break;
     case 'square':
-      DrawerContext.setStrategy(new SquareDrawingStrategy(helper));
+      DrawerContext.setStrategy(new SquareDrawingStrategy());
       break;
     case 'line':
-      DrawerContext.setStrategy(new LineDrawingStrategy(helper));
+      DrawerContext.setStrategy(new LineDrawingStrategy());
       break;
     case 'eraser':
-      DrawerContext.setStrategy(new EraserDrawingStrategy(helper));
+      DrawerContext.setStrategy(new EraserDrawingStrategy());
   }
 };
 
