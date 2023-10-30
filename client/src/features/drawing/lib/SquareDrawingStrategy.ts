@@ -1,42 +1,47 @@
-// import ShapeStorage from '../../../entities/shape/ShapeStorage';
-// import Square from '../../../entities/shape/Square';
+import { Square, ShapeStorage } from '../../../entities/shapes';
 import { Canvas } from '../../../shared/lib/Canvas';
 import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
 
 class SquareDrawingStrategy implements IDrawerStrategy {
-  x = 0;
-  y = 0;
-  width = 0;
-  height = 0;
+  square: Square;
   ctx: CanvasRenderingContext2D;
 
   constructor() {
     this.ctx = Canvas.getInstance().ctx;
+    this.square = new Square(0, 0);
   }
 
+  //TODO: avoid plain string
   get name(): string {
     return 'square';
   }
 
   beforeDraw(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this.square.x = x;
+    this.square.y = y;
   }
 
   draw(newX: number, newY: number) {
-    // ShapeStorage.restore();
+    const { width, height } = this.ctx.canvas;
+    this.ctx.clearRect(0, 0, width, height);
 
-    const { x, y } = this;
-    this.ctx.beginPath();
-    this.ctx.strokeRect(x, y, newX - x, newY - y);
+    this.square.setWidth(newX - this.square.x);
+    this.square.setHeight(newY - this.square.x);
+
+    this.square.draw();
+    ShapeStorage.restore();
   }
 
-  afterDraw(lastX: number, lastY: number) {
-    const { x, y } = this;
-    this.width = lastX - x;
-    this.height = lastY - y;
+  afterDraw() {
+    if (this.square.isVisible()) {
+      return;
+    }
 
-    // ShapeStorage.addShape(new Square(x, y, this.width, this.height));
+    this.square.strokeStyle = this.ctx.strokeStyle;
+    this.square.lineWidth = this.ctx.lineWidth;
+    ShapeStorage.addShape(this.square);
+
+    this.square = new Square(0, 0);
   }
 }
 

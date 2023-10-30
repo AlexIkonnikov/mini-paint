@@ -17,7 +17,7 @@ const AuthFormModal = observer(() => {
       color: getRandomColor(),
     });
 
-    id && Ws.init(id);
+    // id && Ws.init(id);
   };
 
   return (
