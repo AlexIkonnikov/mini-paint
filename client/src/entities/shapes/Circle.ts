@@ -1,29 +1,22 @@
 import { Canvas } from '../../shared/lib/Canvas';
 
-class Square {
+class Circle {
   x = 0;
   y = 0;
-  width: number;
-  height: number;
+  radius = 0;
   ctx: CanvasRenderingContext2D;
   strokeStyle: typeof this.ctx.strokeStyle | null = null;
   lineWidth: typeof this.ctx.lineWidth | null = null;
 
-  constructor(x: number, y: number, width?: number, height?: number) {
+  constructor(x: number, y: number, radius?: number) {
     this.x = x;
     this.y = y;
-    this.width = width ?? 0;
-    this.height = height ?? 0;
-
+    this.radius = radius ?? 0;
     this.ctx = Canvas.getInstance().ctx;
   }
 
-  setWidth(width: number) {
-    this.width = width;
-  }
-
-  setHeight(height: number) {
-    this.height = height;
+  setRadius(radius: number) {
+    this.radius = radius;
   }
 
   draw() {
@@ -38,24 +31,25 @@ class Square {
       this.ctx.lineWidth = this.lineWidth;
     }
 
-    this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    this.ctx.stroke();
+
     this.ctx.restore();
   }
 
   isVisible() {
-    return this.width === 0 && this.height === 0;
+    return this.radius === 0;
   }
 
   toJSON() {
-    const { x, y, width, height, strokeStyle } = this;
+    const { x, y, radius, strokeStyle } = this;
     return JSON.stringify({
       x,
       y,
-      width,
-      height,
+      radius,
       strokeStyle,
     });
   }
 }
 
-export default Square;
+export default Circle;

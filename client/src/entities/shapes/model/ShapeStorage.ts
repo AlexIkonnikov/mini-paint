@@ -1,8 +1,6 @@
 export interface IShape {
   x: number;
   y: number;
-  width: number;
-  height: number;
   draw(): void;
 }
 

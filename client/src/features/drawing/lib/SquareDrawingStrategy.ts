@@ -24,12 +24,12 @@ class SquareDrawingStrategy implements IDrawerStrategy {
   draw(newX: number, newY: number) {
     const { width, height } = this.ctx.canvas;
     this.ctx.clearRect(0, 0, width, height);
+    ShapeStorage.restore();
 
     this.square.setWidth(newX - this.square.x);
-    this.square.setHeight(newY - this.square.x);
+    this.square.setHeight(newY - this.square.y);
 
     this.square.draw();
-    ShapeStorage.restore();
   }
 
   afterDraw() {
