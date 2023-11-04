@@ -4,7 +4,6 @@ import { UserStore } from '../../entities/user';
 import {
   BrushDrawingStrategy,
   CircleDrawingStrategy,
-  EraserDrawingStrategy,
   LineDrawingStrategy,
   SquareDrawingStrategy,
 } from '../../features/drawing';
@@ -74,8 +73,9 @@ const setStrategy = (tool: string) => {
     case 'line':
       DrawerContext.setStrategy(new LineDrawingStrategy());
       break;
-    case 'eraser':
-      DrawerContext.setStrategy(new EraserDrawingStrategy());
+    default:
+      DrawerContext.setStrategy(null);
+      break;
   }
 };
 

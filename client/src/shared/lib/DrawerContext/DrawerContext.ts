@@ -7,7 +7,7 @@ class DrawerContext {
     this.strategy = null;
   }
 
-  public setStrategy(strategy: IDrawerStrategy) {
+  public setStrategy(strategy: IDrawerStrategy | null) {
     this.strategy = strategy;
   }
 

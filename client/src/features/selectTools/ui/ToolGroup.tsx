@@ -6,7 +6,6 @@ import './styles.css';
 import {
   BrushDrawingStrategy,
   CircleDrawingStrategy,
-  EraserDrawingStrategy,
   LineDrawingStrategy,
   SquareDrawingStrategy,
 } from '../../drawing';
@@ -64,8 +63,7 @@ const ToolGroup = () => {
         value={Tools.ERASER}
         onClick={() => {
           changeTool(Tools.ERASER);
-          const strategy = new EraserDrawingStrategy();
-          DrawerContext.setStrategy(strategy);
+          DrawerContext.setStrategy(null);
         }}
       />
     </Radio.Group>
