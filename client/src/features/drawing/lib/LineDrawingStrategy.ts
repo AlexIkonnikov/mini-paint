@@ -1,13 +1,14 @@
-import {
-  IDrawerStrategy,
-  DrawerHelper,
-} from '../../../shared/lib/DrawerContext';
+import { Line, ShapeStorage } from '../../../entities/shapes';
+import { Canvas } from '../../../shared/lib/Canvas';
+import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
 
 class LineDrawingStrategy implements IDrawerStrategy {
-  drawerHelper: DrawerHelper;
+  ctx: CanvasRenderingContext2D;
+  line: Line;
 
-  constructor(drawerHelper: DrawerHelper) {
-    this.drawerHelper = drawerHelper;
+  constructor() {
+    this.ctx = Canvas.getInstance().ctx;
+    this.line = new Line(0, 0);
   }
 
   get name(): string {
@@ -15,19 +16,28 @@ class LineDrawingStrategy implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.drawerHelper.makeSnapshot();
-    this.drawerHelper.x = x;
-    this.drawerHelper.y = y;
+    this.line.x = x;
+    this.line.y = y;
   }
 
   draw(newX: number, newY: number): void {
-    const { x, y } = this.drawerHelper;
+    const { width, height } = this.ctx.canvas;
+    this.ctx.clearRect(0, 0, width, height);
+    ShapeStorage.restore();
 
-    this.drawerHelper.applySnapshot();
-    this.drawerHelper.ctx.beginPath();
-    this.drawerHelper.ctx.moveTo(x, y);
-    this.drawerHelper.ctx.lineTo(newX, newY);
-    this.drawerHelper.ctx.stroke();
+    this.line.setEndPoint([newX, newY]);
+    this.line.draw();
+  }
+
+  afterDraw() {
+    if (this.line.isVisible()) {
+      return;
+    }
+
+    this.line.strokeStyle = this.ctx.strokeStyle;
+    this.line.lineWidth = this.ctx.lineWidth;
+    ShapeStorage.addShape(this.line);
+    this.line = new Line(0, 0);
   }
 }
 

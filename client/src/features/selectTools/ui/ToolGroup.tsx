@@ -6,12 +6,10 @@ import './styles.css';
 import {
   BrushDrawingStrategy,
   CircleDrawingStrategy,
-  EraserDrawingStrategy,
   LineDrawingStrategy,
   SquareDrawingStrategy,
 } from '../../drawing';
-import DrawerContext, { DrawerHelper } from '../../../shared/lib/DrawerContext';
-import { Canvas } from '../../../shared/lib/Canvas';
+import DrawerContext from '../../../shared/lib/DrawerContext';
 
 import { Tools } from './types';
 
@@ -29,8 +27,7 @@ const ToolGroup = () => {
         value={Tools.BRUSH}
         onClick={() => {
           changeTool(Tools.BRUSH);
-          const { ctx } = Canvas.getInstance();
-          const strategy = new BrushDrawingStrategy(new DrawerHelper(ctx));
+          const strategy = new BrushDrawingStrategy();
           DrawerContext.setStrategy(strategy);
         }}
       />
@@ -39,8 +36,7 @@ const ToolGroup = () => {
         value={Tools.SQUARE}
         onClick={() => {
           changeTool(Tools.SQUARE);
-          const { ctx } = Canvas.getInstance();
-          const strategy = new SquareDrawingStrategy(new DrawerHelper(ctx));
+          const strategy = new SquareDrawingStrategy();
           DrawerContext.setStrategy(strategy);
         }}
       />
@@ -49,8 +45,7 @@ const ToolGroup = () => {
         value={Tools.CIRCLE}
         onClick={() => {
           changeTool(Tools.CIRCLE);
-          const { ctx } = Canvas.getInstance();
-          const strategy = new CircleDrawingStrategy(new DrawerHelper(ctx));
+          const strategy = new CircleDrawingStrategy();
           DrawerContext.setStrategy(strategy);
         }}
       />
@@ -59,19 +54,17 @@ const ToolGroup = () => {
         value={Tools.LINE}
         onClick={() => {
           changeTool(Tools.LINE);
-          const { ctx } = Canvas.getInstance();
-          const strategy = new LineDrawingStrategy(new DrawerHelper(ctx));
+          const strategy = new LineDrawingStrategy();
           DrawerContext.setStrategy(strategy);
         }}
       />
       <Radio
         className="tool eraser"
+        disabled
         value={Tools.ERASER}
         onClick={() => {
           changeTool(Tools.ERASER);
-          const { ctx } = Canvas.getInstance();
-          const strategy = new EraserDrawingStrategy(new DrawerHelper(ctx));
-          DrawerContext.setStrategy(strategy);
+          DrawerContext.setStrategy(null);
         }}
       />
     </Radio.Group>

@@ -1,13 +1,14 @@
-import {
-  IDrawerStrategy,
-  DrawerHelper,
-} from '../../../shared/lib/DrawerContext';
+import { Circle, ShapeStorage } from '../../../entities/shapes';
+import { Canvas } from '../../../shared/lib/Canvas';
+import { IDrawerStrategy } from '../../../shared/lib/DrawerContext';
 
 class CircleDrawingStrategy implements IDrawerStrategy {
-  drawerHelper: DrawerHelper;
+  ctx: CanvasRenderingContext2D;
+  circle: Circle;
 
-  constructor(drawerHelper: DrawerHelper) {
-    this.drawerHelper = drawerHelper;
+  constructor() {
+    this.ctx = Canvas.getInstance().ctx;
+    this.circle = new Circle(0, 0);
   }
 
   get name(): string {
@@ -15,22 +16,33 @@ class CircleDrawingStrategy implements IDrawerStrategy {
   }
 
   beforeDraw(x: number, y: number) {
-    this.drawerHelper.makeSnapshot();
-    this.drawerHelper.x = x;
-    this.drawerHelper.y = y;
+    this.circle.x = x;
+    this.circle.y = y;
   }
 
   draw(newX: number, newY: number): void {
-    const { x, y } = this.drawerHelper;
+    const { width, height } = this.ctx.canvas;
+    this.ctx.clearRect(0, 0, width, height);
+    ShapeStorage.restore();
 
-    this.drawerHelper.applySnapshot();
-    this.drawerHelper.ctx.beginPath();
-    this.drawerHelper.ctx.arc(x, y, this.getRadius(newX, newY), 0, 2 * Math.PI);
-    this.drawerHelper.ctx.stroke();
+    this.circle.setRadius(this.getRadius(newX, newY));
+    this.circle.draw();
+  }
+
+  afterDraw() {
+    if (this.circle.isVisible()) {
+      return;
+    }
+
+    this.circle.strokeStyle = this.ctx.strokeStyle;
+    this.circle.lineWidth = this.ctx.lineWidth;
+    ShapeStorage.addShape(this.circle);
+
+    this.circle = new Circle(0, 0);
   }
 
   private getRadius(currentX: number, currentY: number) {
-    const { x, y } = this.drawerHelper;
+    const { x, y } = this.circle;
 
     const horizontalLeg = x - currentX;
     const verticalLeg = y - currentY;

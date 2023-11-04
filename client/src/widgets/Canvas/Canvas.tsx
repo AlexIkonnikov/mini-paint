@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 
-import DrawerContext, { DrawerHelper } from '../../shared/lib/DrawerContext';
+import DrawerContext from '../../shared/lib/DrawerContext';
 import Ws from '../../shared/lib/Socket';
 import { Canvas as Singleton } from '../../shared/lib/Canvas';
 import './styles.css';
@@ -10,16 +10,14 @@ const Canvas: FC = () => {
   let isMouseDown = false;
 
   useEffect(() => {
-    const { ctx } = Singleton.getInstance();
-    const helper = new DrawerHelper(ctx);
-
+    /* TODO: implement */
     const onResize = () => {
-      helper.makeSnapshot();
-      ctx.canvas.style.width = window.innerWidth + 'px';
-      ctx.canvas.style.height = window.innerHeight + 'px';
-      ctx.canvas.width = window.devicePixelRatio * window.innerWidth;
-      ctx.canvas.height = window.devicePixelRatio * window.innerHeight;
-      helper.applySnapshot();
+      // helper.makeSnapshot();
+      // ctx.canvas.style.width = window.innerWidth + 'px';
+      // ctx.canvas.style.height = window.innerHeight + 'px';
+      // ctx.canvas.width = window.devicePixelRatio * window.innerWidth;
+      // ctx.canvas.height = window.devicePixelRatio * window.innerHeight;
+      // helper.applySnapshot();
     };
 
     window.addEventListener('resize', onResize);
@@ -28,8 +26,7 @@ const Canvas: FC = () => {
 
   /* initial strategy */
   useEffect(() => {
-    const { ctx } = Singleton.getInstance();
-    DrawerContext.setStrategy(new BrushDrawingStrategy(new DrawerHelper(ctx)));
+    DrawerContext.setStrategy(new BrushDrawingStrategy());
   }, []);
 
   const withRelativeXYCoords =

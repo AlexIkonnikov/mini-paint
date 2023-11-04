@@ -6,6 +6,8 @@ import { UserStore } from '../../../entities/user';
 import getRandomColor from '../../../shared/lib/getRandomColor';
 import Ws from '../../../shared/lib/Socket';
 
+const USE_SERVER = false;
+
 const AuthFormModal = observer(() => {
   const { currentUser } = UserStore;
   const { id } = useParams();
@@ -17,7 +19,7 @@ const AuthFormModal = observer(() => {
       color: getRandomColor(),
     });
 
-    id && Ws.init(id);
+    USE_SERVER && id && Ws.init(id);
   };
 
   return (
