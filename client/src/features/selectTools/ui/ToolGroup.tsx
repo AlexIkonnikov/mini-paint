@@ -60,6 +60,7 @@ const ToolGroup = () => {
       />
       <Radio
         className="tool eraser"
+        disabled
         value={Tools.ERASER}
         onClick={() => {
           changeTool(Tools.ERASER);
